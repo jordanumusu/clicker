@@ -1,0 +1,248 @@
+<html>
+<head>
+<title>main.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000000;}
+.s1 { color: #008000; font-weight: bold;}
+.s2 { color: #000080; font-weight: bold;}
+.s3 { color: #0000ff;}
+.s4 { color: #808080; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.dart</font>
+</center></td></tr></table>
+<pre>import <span class="s1">'package:flutter/material.dart'</span>;
+import <span class="s1">'dart:math'</span>;
+
+<span class="s2">void </span>main() {
+  runApp(MaterialApp(
+
+home:Home(),
+  ),
+  );
+}
+
+
+  <span class="s2">class </span>Home <span class="s2">extends </span>StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      <span class="s2">return </span>Scaffold(
+        appBar: AppBar(
+          title: Text(<span class="s1">'Tile Clicker'</span>),
+          centerTitle: <span class="s2">true</span>,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: &lt;Widget&gt;[
+            Container(
+              padding: EdgeInsets.fromLTRB(<span class="s3">120.0</span>, <span class="s3">0.0</span>, <span class="s3">0.0</span>, <span class="s3">0.0</span>),
+              child: Text(<span class="s1">'Tile Clicker'</span>,
+              style: TextStyle(
+                fontSize: (<span class="s3">40.0</span>),
+              ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(<span class="s3">120.0</span>, <span class="s3">0.0</span>, <span class="s3">0.0</span>, <span class="s3">0.0</span>),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =&gt; Vis()),
+                  );
+                },
+                child: Text(<span class="s1">'Start'</span>),
+            ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+
+
+
+
+
+
+<span class="s2">class </span>Vis <span class="s2">extends </span>StatefulWidget {
+  <span class="s2">final </span>String title;
+
+  Vis({Key key, <span class="s2">this</span>.title}) : <span class="s2">super</span>(key: key);
+
+  @override
+  _Vis createState() =&gt; _Vis();
+}
+
+bool widgetVisible = <span class="s2">true </span>;
+<span class="s2">class </span>ChildWidget <span class="s2">extends </span>StatefulWidget {
+  @override
+  StateChildWidget createState() =&gt; StateChildWidget();
+}
+
+
+<span class="s2">class </span>StateChildWidget <span class="s2">extends </span>State&lt;ChildWidget&gt; {
+
+  int wrongcounter = <span class="s3">0</span>;
+  int rightcounter = <span class="s3">0</span>;
+
+  List colors = [Colors.red, Colors.blue];
+  Random random = <span class="s2">new </span>Random();
+  int index = <span class="s3">0</span>;
+
+  <span class="s2">void </span>Wrong(){
+    wrongcounter = wrongcounter + <span class="s3">1</span>;
+  }
+
+  <span class="s2">void </span>Right(){
+    rightcounter = rightcounter + <span class="s3">1</span>;
+  }
+  <span class="s2">void </span>Over(){
+    <span class="s2">if </span>(wrongcounter == <span class="s3">3</span>){
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =&gt; GameOver()
+    ),
+      );
+    }
+  }
+  <span class="s2">void </span>changeIndex() {
+    setState(() =&gt; index = random.nextInt(<span class="s3">2</span>));
+  }
+
+  Widget build(BuildContext context) {
+    <span class="s2">return </span>Column(
+      children: &lt;Widget&gt;[
+          Expanded(child: Container(
+              height: <span class="s3">200</span>,
+              width: <span class="s3">400</span>,
+              color: colors[index],
+              margin: EdgeInsets.only(top: <span class="s3">20</span>, bottom: <span class="s3">20</span>),
+              child: Center(child: Text(<span class="s1">'X'</span>,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white,
+                      fontSize: <span class="s3">24</span>)))
+          ),
+          ),
+
+
+
+        RaisedButton(
+          child: Text(<span class="s1">'Blue'</span>),
+          onPressed: (){
+            <span class="s2">if</span>(colors[index] == Colors.blue){
+              Right();
+            }
+            <span class="s2">else</span>{
+              Wrong();
+              Over();
+            }
+            changeIndex();
+          },
+          color: Colors.blue,
+          textColor: Colors.white,
+          padding: EdgeInsets.fromLTRB(<span class="s3">200</span>, <span class="s3">10</span>, <span class="s3">200</span>, <span class="s3">10</span>),
+        ),
+        RaisedButton(
+          child: Text(<span class="s1">'Red'</span>),
+          onPressed: (){
+            <span class="s2">if</span>(colors[index] == Colors.red){
+              Right();
+            }
+            <span class="s2">else</span>{
+              Wrong();
+              Over();
+            }
+            changeIndex();
+            },
+          color: Colors.red,
+          textColor: Colors.white,
+          padding: EdgeInsets.fromLTRB(<span class="s3">200</span>, <span class="s3">10</span>, <span class="s3">200</span>, <span class="s3">10</span>),
+        ),
+
+      ],
+    );
+  }
+}
+
+
+
+<span class="s2">class </span>_Vis <span class="s2">extends </span>State&lt;Vis&gt; {
+
+
+  @override
+  Widget build(BuildContext context) {
+    <span class="s4">// The green box goes here with some other Widgets.</span>
+    <span class="s2">final </span>title = <span class="s1">'Tile Clicker'</span>;
+
+    <span class="s2">return </span>MaterialApp(
+      title: title,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: SafeArea(
+          child: Center(
+
+        child: ChildWidget(),
+          ),
+        ),
+
+      ),
+    );
+  }
+  }
+
+<span class="s2">class </span>GameOver <span class="s2">extends </span>StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    <span class="s2">return </span>Scaffold(
+      appBar: AppBar(
+        title: Text(<span class="s1">'Game Over'</span>),
+        centerTitle: <span class="s2">true</span>,
+      ),
+      body: Center(
+        child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(<span class="s1">'Game Over'</span>,
+          style: TextStyle(fontSize: <span class="s3">50</span>),
+          ),
+          RaisedButton(
+              child: Text(<span class="s1">'Return to Home'</span>),
+              color: Colors.lightBlueAccent,
+              textColor: Colors.white,
+              padding: <span class="s2">new </span>EdgeInsets.all(<span class="s3">25.0</span>),
+              onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =&gt; Home()),
+            );
+          }
+          )
+        ],
+        ),
+      ));
+  }
+}
+<span class="s4">//class Game extends StatelessWidget {</span>
+<span class="s4">//  @override</span>
+<span class="s4">//  Widget build(BuildContext context) {</span>
+
+<span class="s4">//  }</span>
+ <span class="s4">// }</span>
+
+
+
+
+</pre>
+</body>
+</html>
