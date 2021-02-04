@@ -4,13 +4,13 @@ import 'dart:math';
 void main() {
   runApp(MaterialApp(
 
-home:Home(),
+home:HomeScreen(),
   ),
   );
 }
 
 
-  class Home extends StatelessWidget {
+  class HomeScreen extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -36,7 +36,7 @@ home:Home(),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Vis()),
+                    MaterialPageRoute(builder: (context) => GamePage()),
                   );
                 },
                 child: Text('Start'),
@@ -54,43 +54,67 @@ home:Home(),
 
 
 
-class Vis extends StatefulWidget {
-  final String title;
 
-  Vis({Key key, this.title}) : super(key: key);
+
+
+
+//Make sure that the naming of classes is consistent and understable.
+// 
+class GamePage extends StatelessWidget {
+
 
   @override
-  _Vis createState() => _Vis();
-}
+  Widget build(BuildContext context) {
+    // The green box goes here with some other Widgets.
+    final title = 'Tile Clicker';
 
-bool widgetVisible = true ;
-class ChildWidget extends StatefulWidget {
+    return MaterialApp(
+      title: title,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: SafeArea(
+          child: Center(
+
+        child: GameWindow(),
+          ),
+        ),
+
+      ),
+    );
+  }
+  }
+
+
+
+class GameWindow extends StatefulWidget {
   @override
-  StateChildWidget createState() => StateChildWidget();
+  _GameWindowState createState() => _GameWindowState();
 }
 
 
-class StateChildWidget extends State<ChildWidget> {
+class _GameWindowState extends State<GameWindow> {
 
-  int wrongcounter = 0;
-  int rightcounter = 0;
+  int strikesRemaining = 3;
+  int gameScore = 0;
 
   List colors = [Colors.red, Colors.blue];
   Random random = new Random();
   int index = 0;
 
-  void Wrong(){
-    wrongcounter = wrongcounter + 1;
+  void addStrike(){
+    strikesRemaining = strikesRemaining - 1;
   }
 
-  void Right(){
-    rightcounter = rightcounter + 1;
+  void addPoint(){
+    gameScore = gameScore + 1;
   }
-  void Over(){
-    if (wrongcounter == 3){
+  void checkStrikesRemaining(){
+    if (strikesRemaining == 0){
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GameOver()
+          MaterialPageRoute(builder: (context) => GameOverScreen(gameScore)
     ),
       );
     }
@@ -113,18 +137,20 @@ class StateChildWidget extends State<ChildWidget> {
                       fontSize: 24)))
           ),
           ),
-
+          Container(
+            margin:EdgeInsets.only(bottom:20),
+          child: Text('Strikes Remaining: ' + strikesRemaining.toString(), style:TextStyle(fontSize: 20))),
 
 
         RaisedButton(
           child: Text('Blue'),
           onPressed: (){
             if(colors[index] == Colors.blue){
-              Right();
+              addPoint();
             }
             else{
-              Wrong();
-              Over();
+              addStrike();
+              checkStrikesRemaining();
             }
             changeIndex();
           },
@@ -136,11 +162,11 @@ class StateChildWidget extends State<ChildWidget> {
           child: Text('Red'),
           onPressed: (){
             if(colors[index] == Colors.red){
-              Right();
+              addPoint();
             }
             else{
-              Wrong();
-              Over();
+              addStrike();
+              checkStrikesRemaining();
             }
             changeIndex();
             },
@@ -155,34 +181,11 @@ class StateChildWidget extends State<ChildWidget> {
 }
 
 
+class GameOverScreen extends StatelessWidget {
 
-class _Vis extends State<Vis> {
+ final int gameScore;
+ GameOverScreen(this.gameScore);
 
-
-  @override
-  Widget build(BuildContext context) {
-    // The green box goes here with some other Widgets.
-    final title = 'Tile Clicker';
-
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: SafeArea(
-          child: Center(
-
-        child: ChildWidget(),
-          ),
-        ),
-
-      ),
-    );
-  }
-  }
-
-class GameOver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,17 +201,23 @@ class GameOver extends StatelessWidget {
           Text('Game Over',
           style: TextStyle(fontSize: 50),
           ),
-          RaisedButton(
-              child: Text('Return to Home'),
-              color: Colors.lightBlueAccent,
-              textColor: Colors.white,
-              padding: new EdgeInsets.all(25.0),
-              onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
-          }
+          Text('Score: ' + gameScore.toString(), style: TextStyle(fontSize: 30),),
+          
+          Container(
+            margin: new EdgeInsets.only(top:5.0),
+            child: RaisedButton(
+                child: Text('Return to Home'),
+                color: Colors.lightBlueAccent,
+                textColor: Colors.white,
+                
+                padding: new EdgeInsets.all(25.0),
+                onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            }
+            ),
           )
         ],
         ),
